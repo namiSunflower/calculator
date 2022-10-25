@@ -37,7 +37,7 @@
             percent:function(){
                 this.$store.dispatch('percent');
             },
-            setPrevious(){
+            setPrevious:function(){
                 this.$store.dispatch('setPrevious')
             },
             add:function(){
