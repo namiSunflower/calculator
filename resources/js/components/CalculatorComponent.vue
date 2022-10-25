@@ -1,6 +1,6 @@
 <template>
     <div class="calculator">
-        <div class="display">{{ current || 0 }}</div>
+        <div class="display">{{ output || 0 }}</div>
         <div class="btn" @click="append(7)">7</div>
         <div class="btn" @click="append(8)">8</div>
         <div class="btn" @click="append(9)">9</div>
@@ -16,74 +16,54 @@
         <div class="btn" @click="clear">C</div>
         <div class="btn" @click="append(0)">0</div>
         <div class="btn" @click="equal">=</div>
-        <div class="btn operator">/</div>
+        <div class="btn operator" @click="divide">/</div>
         <div class="btn bottom1" @click="dot">.</div>
-        <div class="btn operator bottom2">%</div>
+        <div class="btn operator" @click="percent">%</div>
     </div>
 </template>
 
 <script>
     export default {
-        data(){
-            return{
-                current: '',
-                previous: null,
-                operator: null,
-                operatorClicked: false,
-            }
-        },
         methods:{
-            clear(){
-                this.current = '';
+            clear:function(){
+                this.$store.dispatch('clear');
             },
-            append(number){
-                if(this.operatorClicked){
-                    this.current = '';
-                    this.operatorClicked = false;
-                }
-                this.current = `${this.current}${number}`;
+            append:function(number){
+                this.$store.dispatch('appendNumber', number)
             },
-            dot(){
-                if (this.current.indexOf('.') === -1){
-                    this.append('.');
-                }
+            dot:function(){
+                this.$store.dispatch('dot');
+            },
+            percent:function(){
+                this.$store.dispatch('percent');
             },
             setPrevious(){
-                this.previous = this.current;
-                this.operatorClicked = true;
+                this.$store.dispatch('setPrevious')
             },
-            add(){
-                this.operator = (a,b) => a+b;
-                this.setPrevious();
+            add:function(){
+                this.$store.dispatch('add');
             },
-            subtract(){
-                this.operator = (a,b) => a-b;
-                this.setPrevious();
+            subtract:function(){
+                this.$store.dispatch('subtract');
             },
-            multiply(){
-                this.operator = (a,b) => a*b;
-                this.setPrevious();
+            multiply:function(){
+                this.$store.dispatch('multiply');
             },
-            divide(){
-                this.operator = (a,b) => a/b;
-                this.setPrevious();
+            divide:function(){
+                this.$store.dispatch('divide');
             },
-            equal(){
-                this.current = `${this.operator(parseFloat(this.previous), parseFloat(this.current))}`;
-                this.previous = null;
+            equal:function(){
+                this.$store.dispatch('equal');
             }
-
         },
         mounted() {
             console.log('Component mounted.')
         }, 
         computed:{
             output(){
-                return this.$store.getters.result;
-            },
-            tester(){
-                return this.$store.getters.tester;
+                return this.$store.getters.current;
             }
+
         }
     }
 </script>

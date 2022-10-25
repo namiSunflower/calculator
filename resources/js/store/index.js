@@ -3,16 +3,13 @@ import { createStore } from 'vuex';
 export const store = createStore({
     state:{
         previous: null,
-        current: null,
+        current: '',
         operator: null,
-        operatorClicked: false
+        operatorClicked: false,
     },
     getters: {
-        tester:state =>{
-            return state.calculated;
-        },
-        result:state =>{
-            return state.result;
+        current:state =>{
+            return state.current;
         }
     },
     mutations:{
@@ -26,40 +23,53 @@ export const store = createStore({
             }
             state.current = `${state.current}${payload}`
         },
-        dot(state){
-            if(state.current.indexOf('.') === -1){
-                this.appendNumber('.')
-            }
-        },
         setPrevious(state){
             state.previous = state.current;
             state.operatorClicked = true;
         },
-        add(state){
-            state.operator = (a,b) => a+b;
-            this.setPrevious();
-        },
-        subtract(state){
-            state.operator = (a,b) => a-b;
-            this.setPrevious();
-        },
-        multiply(state){
-            state.operator = (a,b) => a*b;
-            this.setPrevious();
-        },
-        divide(state){
-            state.operator = (a,b) => (a/b);
-            this.setPrevious();
+        equal(state){
+            state.current = `${state.operator(parseFloat(state.previous), parseFloat(state.current))}`;
+            state.previous = null;
         }
-        // calculate: (state) =>{
-        //     if (state.operator == '+'){}
-        // }
-
     }, 
-    // actions:{
-    //     (){
-            
-    //     }
-    // }
+    actions:{
+        clear:context =>{
+             context.commit('clear');
+        },
+        appendNumber:(context, payload) =>{
+            context.commit('appendNumber', payload);
+        },
+        dot:({getters, commit})=>{
+            if(getters.current.indexOf('.') === -1){
+                commit('appendNumber','.')
+            }
+        },
+        setPrevious:context =>{
+            context.commit('setPrevious');
+        },
+        add({state, commit}){
+            state.operator = (a,b) => a+b;
+            commit('setPrevious');
+        },
+        subtract({state, commit}){
+            state.operator = (a,b) => a-b;
+            commit('setPrevious');
+        },
+        multiply({state, commit}){
+            state.operator = (a,b) => a*b;
+            commit('setPrevious');
+        },
+        divide({state, commit}){
+            state.operator = (a,b) => a/b;
+            commit('setPrevious');
+        },
+        percent({state, commit}){
+            state.current = state.current/100;
+            commit('setPrevious')
+        },
+        equal(context){
+            context.commit('equal');
+        }
+    }
     }
 )
