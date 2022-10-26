@@ -64,7 +64,6 @@
             ...mapGetters([
                 'output'
             ])
-
         }
     }
 </script>
