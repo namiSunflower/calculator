@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
     export default {
         methods:{
             clear:function(){
@@ -60,9 +61,9 @@
             console.log('Component mounted.')
         }, 
         computed:{
-            output(){
-                return this.$store.getters.current;
-            }
+            ...mapGetters([
+                'output'
+            ])
 
         }
     }

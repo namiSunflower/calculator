@@ -8,7 +8,7 @@ export const store = createStore({
         operatorClicked: false,
     },
     getters: {
-        current:state =>{
+        output:state =>{
             return state.current;
         }
     },
@@ -27,9 +27,24 @@ export const store = createStore({
             state.previous = state.current;
             state.operatorClicked = true;
         },
+        add(state){
+            state.operator = (a,b) => a+b;
+        },
+        subtract(state){
+            state.operator = (a,b) => a-b;
+        },
+        multiply(state){
+            state.operator = (a,b) => a*b;
+        },
+        divide(state){
+            state.operator = (a,b) => a/b;
+        },
+        percent(state){
+            state.current = state.current/100;
+        },
         equal(state){
             state.current = `${state.operator(parseFloat(state.previous), parseFloat(state.current))}`;
-            state.previous = null;
+            state.previous = '';
         }
     }, 
     actions:{
@@ -47,29 +62,29 @@ export const store = createStore({
         setPrevious:context =>{
             context.commit('setPrevious');
         },
-        add({state, commit}){
-            state.operator = (a,b) => a+b;
+        add:({commit})=>{
             commit('setPrevious');
+            commit('add');
         },
-        subtract({state, commit}){
-            state.operator = (a,b) => a-b;
+        subtract:({commit})=>{
             commit('setPrevious');
+            commit('subtract');
         },
-        multiply({state, commit}){
-            state.operator = (a,b) => a*b;
+        multiply:({commit})=>{
             commit('setPrevious');
+            commit('multiply');
         },
-        divide({state, commit}){
-            state.operator = (a,b) => a/b;
+        divide:({commit})=>{
             commit('setPrevious');
+            commit('divide');
         },
-        percent({state, commit}){
-            state.current = state.current/100;
-            commit('setPrevious')
+        percent:({commit})=>{
+            commit('setPrevious');
+            commit('percent');
         },
         equal(context){
             context.commit('equal');
-        }
+        },
     }
     }
 )
