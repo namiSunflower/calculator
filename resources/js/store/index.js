@@ -21,7 +21,10 @@ export const store = createStore({
                 state.current = '',
                 state.operatorClicked = false;
             }
-            state.current = `${state.current}${payload}`
+            if(isNaN(state.current))
+                state.current = `${payload}`
+            else
+                state.current = `${state.current}${payload}`
         },
         setPrevious(state){
             state.previous = state.current;
@@ -37,7 +40,7 @@ export const store = createStore({
             state.operator = (a,b) => a*b;
         },
         divide(state){
-            state.operator = (a,b) => a/b;
+            state.operator = (a,b) => (b !=0 ? a/b : state.current = `can't divide by zero`);
         },
         percent(state){
             state.current = state.current/100;
