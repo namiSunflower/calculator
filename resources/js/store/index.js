@@ -43,7 +43,8 @@ export const store = createStore({
             state.current = state.current/100;
         },
         equal(state){
-            state.current = `${state.operator(parseFloat(state.previous), parseFloat(state.current))}`;
+            if(state.previous !== '')
+                state.current = `${state.operator(parseFloat(state.previous), parseFloat(state.current))}`;
             state.previous = '';
         }
     }, 
