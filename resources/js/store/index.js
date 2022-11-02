@@ -59,7 +59,7 @@ export const store = createStore({
             context.commit('appendNumber', payload);
         },
         dot:({getters, commit})=>{
-            if(getters.current.indexOf('.') === -1){
+            if(getters.output.indexOf('.') === -1){
                 commit('appendNumber','.')
             }
         },
